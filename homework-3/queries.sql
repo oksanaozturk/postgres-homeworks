@@ -38,7 +38,20 @@ WHERE order_details.quantity=10;
 SELECT product_name
 FROM products
 WHERE product_id IN (
-    SELECT product_id
+    SELECT DISTINCT product_id
     FROM order_details
     WHERE quantity = 10
 )
+
+SELECT DISTINCT product_name
+FROM order_details
+INNER JOIN products USING(product_id)
+WHERE product_id = ANY (SELECT product_id
+			  FROM order_details
+			  WHERE quantity=10);
+
+SELECT product_name, product_id
+FROM products
+WHERE product_id = ANY (SELECT product_id
+			  FROM order_details
+			  WHERE quantity=10);
